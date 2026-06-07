@@ -11,14 +11,30 @@ use Filament\Forms\Components\Repeater;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Nepal360\FilamentCmsPro\Models\Tag;
+use Nepal360\FilamentCmsPro\Resources\Filament\Concerns\HasDynamicCustomFields;
 
 class TagResource extends Resource
 {
+    use HasDynamicCustomFields;
+
     protected static ?string $model = Tag::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Taxonomy';
+    public static function shouldRegisterNavigation(): bool
+    {
+        return (bool) \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_tags_enabled', true);
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_group', 'CMS');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_tags_label', 'Tags');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -46,6 +62,10 @@ class TagResource extends Resource
                                 TextInput::make('slug')
                                     ->required()
                                     ->maxLength(255),
+                                Section::make('Translatable Custom Fields')
+                                    ->schema(static::getCustomFieldsSchema('tags', translatableOnly: true))
+                                    ->visible(fn () => count(static::getCustomFieldsSchema('tags', translatableOnly: true)) > 0)
+                                    ->collapsed(),
                             ])
                             ->itemLabel(fn (array $state): ?string => match ($state['locale'] ?? null) {
                                 'en' => 'English Tag Name',
@@ -55,17 +75,22 @@ class TagResource extends Resource
                                 default => 'New Translation',
                             })
                     ]),
+                Section::make('Custom Fields')
+                    ->schema(static::getCustomFieldsSchema('tags', translatableOnly: false))
+                    ->visible(fn () => count(static::getCustomFieldsSchema('tags', translatableOnly: false)) > 0),
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $allColumns = [
+            'id' => TextColumn::make('id')->sortable(),
+            'name' => TextColumn::make('translations.name')
+                ->label('Name')
+                ->searchable(),
+        ];
+
         return $table
-            ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('translations.name')
-                    ->label('Name')
-                    ->searchable(),
-            ]);
+            ->columns(static::getVisibleTableColumns('tags', $allColumns));
     }
 }

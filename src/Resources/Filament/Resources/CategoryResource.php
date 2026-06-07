@@ -12,14 +12,30 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Nepal360\FilamentCmsPro\Models\Category;
+use Nepal360\FilamentCmsPro\Resources\Filament\Concerns\HasDynamicCustomFields;
 
 class CategoryResource extends Resource
 {
+    use HasDynamicCustomFields;
+
     protected static ?string $model = Category::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-folder';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Taxonomy';
+    public static function shouldRegisterNavigation(): bool
+    {
+        return (bool) \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_categories_enabled', true);
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_group', 'CMS');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return \Nepal360\FilamentCmsPro\Models\CmsSetting::get('navigation_categories_label', 'Categories');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -59,6 +75,10 @@ class CategoryResource extends Resource
                                     ->maxLength(255),
                                 Textarea::make('description')
                                     ->rows(2),
+                                Section::make('Translatable Custom Fields')
+                                    ->schema(static::getCustomFieldsSchema('categories', translatableOnly: true))
+                                    ->visible(fn () => count(static::getCustomFieldsSchema('categories', translatableOnly: true)) > 0)
+                                    ->collapsed(),
                             ])
                             ->itemLabel(fn (array $state): ?string => match ($state['locale'] ?? null) {
                                 'en' => 'English Category Name',
@@ -68,22 +88,27 @@ class CategoryResource extends Resource
                                 default => 'New Translation',
                             })
                     ]),
+                Section::make('Custom Fields')
+                    ->schema(static::getCustomFieldsSchema('categories', translatableOnly: false))
+                    ->visible(fn () => count(static::getCustomFieldsSchema('categories', translatableOnly: false)) > 0),
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $allColumns = [
+            'id' => TextColumn::make('id')->sortable(),
+            'name' => TextColumn::make('translations.name')
+                ->label('Name')
+                ->searchable(),
+            'parent' => TextColumn::make('parent.id')
+                ->label('Parent ID')
+                ->placeholder('None'),
+            'order' => TextColumn::make('order')
+                ->sortable(),
+        ];
+
         return $table
-            ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('translations.name')
-                    ->label('Name')
-                    ->searchable(),
-                TextColumn::make('parent.id')
-                    ->label('Parent ID')
-                    ->placeholder('None'),
-                TextColumn::make('order')
-                    ->sortable(),
-            ]);
+            ->columns(static::getVisibleTableColumns('categories', $allColumns));
     }
 }

@@ -20,6 +20,7 @@ class Post extends Model
         'fact_check_status',
         'read_time_minutes',
         'published_at',
+        'custom_fields',
     ];
 
     protected $casts = [
@@ -27,6 +28,7 @@ class Post extends Model
         'sitemap_enabled' => 'boolean',
         'published_at' => 'datetime',
         'trending_score' => 'float',
+        'custom_fields' => 'array',
     ];
 
     /**

@@ -12,6 +12,11 @@ class TagTranslation extends Model
         'locale',
         'name',
         'slug',
+        'custom_fields',
+    ];
+
+    protected $casts = [
+        'custom_fields' => 'array',
     ];
 
     /**

@@ -10,7 +10,9 @@ use Nepal360\FilamentCmsPro\Resources\Filament\Resources\TagResource;
 use Nepal360\FilamentCmsPro\Resources\Filament\Resources\PollResource;
 use Nepal360\FilamentCmsPro\Resources\Filament\Resources\AdCampaignResource;
 use Nepal360\FilamentCmsPro\Resources\Filament\Resources\WebhookResource;
+use Nepal360\FilamentCmsPro\Resources\Filament\Resources\CommentResource;
 use Nepal360\FilamentCmsPro\Resources\Filament\Pages\AnalyticsDashboard;
+use Nepal360\FilamentCmsPro\Resources\Filament\Pages\ManageCmsSettings;
 use Nepal360\FilamentCmsPro\Resources\Filament\Widgets\RealtimeAnalyticsWidget;
 
 class FilamentCmsProPlugin implements Plugin
@@ -30,9 +32,11 @@ class FilamentCmsProPlugin implements Plugin
                 PollResource::class,
                 AdCampaignResource::class,
                 WebhookResource::class,
+                CommentResource::class,
             ])
             ->pages([
                 AnalyticsDashboard::class,
+                ManageCmsSettings::class,
             ])
             ->widgets([
                 RealtimeAnalyticsWidget::class,

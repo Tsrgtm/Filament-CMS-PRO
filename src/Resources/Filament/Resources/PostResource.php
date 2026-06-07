@@ -20,11 +20,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
 use Nepal360\FilamentCmsPro\Models\Post;
+use Nepal360\FilamentCmsPro\Resources\Filament\Concerns\HasDynamicCustomFields;
 use Nepal360\FilamentCmsPro\Resources\Filament\Resources\PostResource\Pages;
 use Nepal360\FilamentCmsPro\Resources\Filament\Resources\PostResource\RelationManagers\RevisionsRelationManager;
 
 class PostResource extends Resource
 {
+    use HasDynamicCustomFields;
     protected static ?string $model = Post::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
@@ -127,7 +129,12 @@ class PostResource extends Resource
                                                         Textarea::make('seo_description')->rows(2),
                                                         Repeater::make('seo_keywords')
                                                             ->simple(TextInput::make('keyword')),
-                                                    ])->collapsed()
+                                                    ])->collapsed(),
+
+                                                Section::make('Translatable Custom Fields')
+                                                    ->schema(static::getCustomFieldsSchema('posts', translatableOnly: true))
+                                                    ->visible(fn () => count(static::getCustomFieldsSchema('posts', translatableOnly: true)) > 0)
+                                                    ->collapsed(),
                                             ])
                                             ->itemLabel(fn (array $state): ?string => match ($state['locale'] ?? null) {
                                                 'en' => 'English Version',
@@ -138,6 +145,10 @@ class PostResource extends Resource
                                             })
                                             ->grid(1)
                                     ]),
+
+                                Section::make('Custom Fields')
+                                    ->schema(static::getCustomFieldsSchema('posts', translatableOnly: false))
+                                    ->visible(fn () => count(static::getCustomFieldsSchema('posts', translatableOnly: false)) > 0),
                             ]),
 
                         // Right Column: Metadata sidebar panels
@@ -200,26 +211,65 @@ class PostResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $allColumns = [
+            'id' => TextColumn::make('id')->sortable(),
+            'featured_image' => ImageColumn::make('featured_image'),
+            'title' => TextColumn::make('translations.title')
+                ->label('Title')
+                ->searchable()
+                ->limit(50),
+            'status' => TextColumn::make('status')
+                ->badge()
+                ->colors([
+                    'gray' => 'draft',
+                    'warning' => 'review',
+                    'success' => 'published',
+                    'danger' => 'rejected',
+                ]),
+            'published_at' => TextColumn::make('published_at')
+                ->dateTime()
+                ->sortable(),
+            'serial_number' => TextColumn::make('index')
+                ->label('#')
+                ->state(static fn ($rowLoop) => $rowLoop?->iteration ?? 1),
+        ];
+
+        $allFilters = [
+            'status' => \Filament\Tables\Filters\SelectFilter::make('status')
+                ->options([
+                    'draft' => 'Draft',
+                    'review' => 'Review',
+                    'fact_check' => 'Fact Check',
+                    'editor_approved' => 'Editor Approved',
+                    'publisher_approved' => 'Publisher Approved',
+                    'published' => 'Published',
+                    'rejected' => 'Rejected',
+                    'archived' => 'Archived',
+                ]),
+            'published_at' => \Filament\Tables\Filters\Filter::make('published_at')
+                ->form([
+                    \Filament\Forms\Components\DatePicker::make('published_from'),
+                    \Filament\Forms\Components\DatePicker::make('published_until'),
+                ])
+                ->query(function ($query, array $data) {
+                    return $query
+                        ->when($data['published_from'], fn ($q, $date) => $q->whereDate('published_at', '>=', $date))
+                        ->when($data['published_until'], fn ($q, $date) => $q->whereDate('published_at', '<=', $date));
+                }),
+            'categories' => \Filament\Tables\Filters\SelectFilter::make('categories')
+                ->relationship('categories', 'id')
+                ->preload(),
+            'tags' => \Filament\Tables\Filters\SelectFilter::make('tags')
+                ->relationship('tags', 'id')
+                ->preload(),
+            'authors' => \Filament\Tables\Filters\SelectFilter::make('authors')
+                ->relationship('authors', 'name')
+                ->preload(),
+        ];
+
         return $table
-            ->columns([
-                TextColumn::make('id')->sortable(),
-                ImageColumn::make('featured_image'),
-                TextColumn::make('translations.title')
-                    ->label('Title')
-                    ->searchable()
-                    ->limit(50),
-                TextColumn::make('status')
-                    ->badge()
-                    ->colors([
-                        'gray' => 'draft',
-                        'warning' => 'review',
-                        'success' => 'published',
-                        'danger' => 'rejected',
-                    ]),
-                TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-            ]);
+            ->columns(static::getVisibleTableColumns('posts', $allColumns))
+            ->filters(static::getVisibleTableFilters('posts', $allFilters));
     }
 
     public static function getRelations(): array

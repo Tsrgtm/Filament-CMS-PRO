@@ -19,6 +19,11 @@ class Comment extends Model
         'status',
         'ip_address',
         'user_agent',
+        'custom_fields',
+    ];
+
+    protected $casts = [
+        'custom_fields' => 'array',
     ];
 
     /**

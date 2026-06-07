@@ -31,6 +31,20 @@ class FilamentCmsProServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Class aliases fallback for Filament v5 layout elements
+        if (!class_exists('Filament\Forms\Components\Grid') && class_exists('Filament\Schemas\Components\Grid')) {
+            class_alias('Filament\Schemas\Components\Grid', 'Filament\Forms\Components\Grid');
+        }
+        if (!class_exists('Filament\Forms\Components\Section') && class_exists('Filament\Schemas\Components\Section')) {
+            class_alias('Filament\Schemas\Components\Section', 'Filament\Forms\Components\Section');
+        }
+        if (!class_exists('Filament\Forms\Components\Tabs') && class_exists('Filament\Schemas\Components\Tabs')) {
+            class_alias('Filament\Schemas\Components\Tabs', 'Filament\Forms\Components\Tabs');
+        }
+        if (!class_exists('Filament\Forms\Components\Wizard') && class_exists('Filament\Schemas\Components\Wizard')) {
+            class_alias('Filament\Schemas\Components\Wizard', 'Filament\Forms\Components\Wizard');
+        }
+
         // Publish Configuration
         if ($this->app->runningInConsole()) {
             $this->publishes([

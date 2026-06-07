@@ -12,6 +12,11 @@ class Category extends Model
     protected $fillable = [
         'parent_id',
         'order',
+        'custom_fields',
+    ];
+
+    protected $casts = [
+        'custom_fields' => 'array',
     ];
 
     /**

@@ -21,6 +21,7 @@ class PostTranslation extends Model
         'schema_markup',
         'editorial_notes',
         'publisher_notes',
+        'custom_fields',
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class PostTranslation extends Model
         'seo_keywords' => 'array',
         'social_meta' => 'array',
         'schema_markup' => 'array',
+        'custom_fields' => 'array',
     ];
 
     /**

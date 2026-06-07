@@ -13,6 +13,11 @@ class CategoryTranslation extends Model
         'name',
         'slug',
         'description',
+        'custom_fields',
+    ];
+
+    protected $casts = [
+        'custom_fields' => 'array',
     ];
 
     /**

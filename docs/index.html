@@ -366,6 +366,9 @@
             <a href="#analytics"><i data-lucide="activity"></i>Non-Intrusive Analytics</a>
             <a href="#revisions"><i data-lucide="history"></i>Revisions & Rollbacks</a>
             <a href="#locks"><i data-lucide="lock"></i>Concurrent Locking</a>
+            <a href="#cms-settings"><i data-lucide="sliders"></i>CMS Settings</a>
+            <a href="#custom-fields"><i data-lucide="plus-circle"></i>Dynamic Custom Fields</a>
+            <a href="#comments"><i data-lucide="message-square"></i>Comments Moderation</a>
             <a href="#webhooks"><i data-lucide="webhook"></i>Webhooks Delivery</a>
             <a href="#taxonomies"><i data-lucide="folder"></i>Categories & Tags</a>
             <a href="#templates"><i data-lucide="layout"></i>Layout Templates</a>
@@ -602,6 +605,94 @@ public function panel(Panel $panel): Panel
             <p>If another editor attempts to open the edit page for the same post, the page redirects to the post list immediately, displaying a danger notification indicating which administrator is editing the post.</p>
         </section>
 
+        <!-- Section: CMS Settings -->
+        <section id="cms-settings">
+            <h2>CMS Settings & Table Customization</h2>
+            <p>Filament CMS Pro provides a centralized <strong>CMS Settings Page</strong> to manage and tune the CMS layout, sidebar navigation routing, and listing table options on the fly. Settings are stored persistently inside the <code>cms_settings</code> table and utilize a caching layer to avoid duplicate database lookups.</p>
+            
+            <h3>Navigation & Sidebar Controls</h3>
+            <p>Through the <strong>Navigation</strong> settings tab, administrators can:</p>
+            <ul>
+                <li><strong>Toggle Visibility</strong>: Enable or disable Sidebar menu links for Categories and Tags individually.</li>
+                <li><strong>Custom Sidebar Labels</strong>: Change the menu label displayed in the Filament sidebar dynamically (e.g. rename "Categories" to "Sections").</li>
+                <li><strong>Custom Navigation Groups</strong>: Define exactly which navigation group under which the menus are clustered.</li>
+            </ul>
+
+            <h3>Listing Table Configuration</h3>
+            <p>The <strong>Table Configurations</strong> allow dynamic toggling of table column visibilities and filters for Posts, Categories, Tags, and Comments without code changes. Toggling these settings dynamically alters the schema builder inside each Filament Resource:</p>
+            <ul>
+                <li><strong>Toggle Table Columns</strong>: Choose whether to display columns like <code>ID</code>, <code>Serial Number</code> (dynamic index counter), <code>Featured Image</code>, <code>Status</code>, <code>Published At</code>, and custom fields.</li>
+                <li><strong>Toggle Filters</strong>: Enable or disable sidebar/header table filters such as filtering posts by Category, Tag, Author, or Status.</li>
+            </ul>
+        </section>
+
+        <!-- Section: Dynamic Custom Fields -->
+        <section id="custom-fields">
+            <h2>Dynamic Custom Fields Builder</h2>
+            <p>Administrators can dynamically define metadata attributes for Posts, Categories, Tags, and Comments from the CMS Settings dashboard. These schemas inject inputs automatically into resources based on their translatability:</p>
+            
+            <div class="alert">
+                <strong>Translatable vs. Non-Translatable Injections:</strong>
+                <ul>
+                    <li><strong>Translatable Fields</strong>: Automatically nested inside translation panels/repeaters. They map directly onto the localized translation tables (e.g. <code>post_translations</code>) so content authors can translate metadata for each locale.</li>
+                    <li><strong>Non-Translatable Fields</strong>: Appended directly to the main resource forms. They map to the core parent table (e.g. <code>posts</code>) and remain uniform across all translations.</li>
+                </ul>
+            </div>
+
+            <h3>Configurable Field Parameters</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Description</th>
+                        <th>Supported Form Components</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Field Type</strong></td>
+                        <td>The visual form component injected.</td>
+                        <td><code>Text</code>, <code>Textarea</code>, <code>Select</code>, <code>Toggle</code>, <code>Date/Time Picker</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key (Name)</strong></td>
+                        <td>The array attribute key stored in the <code>custom_fields</code> JSON column.</td>
+                        <td>Alphanumeric snake_case string (e.g. <code>seo_meta_description</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Label</strong></td>
+                        <td>The text displayed above the form input field.</td>
+                        <td>Human-readable string (e.g. "SEO Meta Description")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Required</strong></td>
+                        <td>Specifies if validation forces the field to be completed.</td>
+                        <td>Boolean (True / False)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Translatable</strong></td>
+                        <td>Controls localization grouping (nested or main form).</td>
+                        <td>Boolean (True / False)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section: Comments Moderation -->
+        <section id="comments">
+            <h2>Comments Moderation & Management</h2>
+            <p>A complete <strong>Comments Resource</strong> is included to monitor, moderate, and track discussions on published posts. Administrators can review author credentials, edit comment text, and update moderation states.</p>
+            
+            <h3>Moderation States Workflow</h3>
+            <p>Comments support the following status transitions:</p>
+            <div class="alert font-mono">
+                pending -> approved -> spam -> rejected
+            </div>
+
+            <h3>Dynamic Comment Custom Fields</h3>
+            <p>Just like posts and taxonomies, Comments fully support the dynamic custom fields engine. This allows capturing custom data (such as rating scores, user flags, or external spam check scores) and displaying them within the comment moderation workspace.</p>
+        </section>
+
         <!-- Section: Webhooks -->
         <section id="webhooks">
             <h2>Webhooks Delivery System</h2>
@@ -749,6 +840,9 @@ Accept: application/json</code></pre>
             { term: 'rollbacks', id: '#revisions' },
             { term: 'locks', id: '#locks' },
             { term: 'locking', id: '#locks' },
+            { term: 'cms settings', id: '#cms-settings' },
+            { term: 'custom fields', id: '#custom-fields' },
+            { term: 'comments', id: '#comments' },
             { term: 'webhooks', id: '#webhooks' },
             { term: 'categories', id: '#taxonomies' },
             { term: 'tags', id: '#taxonomies' },

@@ -78,4 +78,37 @@ class CmsEnterpriseFeaturesTest extends TestCase
             return hash_equals($expectedSignature, $signature);
         });
     }
+
+    public function test_cms_settings_can_be_stored_and_retrieved(): void
+    {
+        \Nepal360\FilamentCmsPro\Models\CmsSetting::set('test_key', ['hello' => 'world']);
+
+        $this->assertEquals(['hello' => 'world'], \Nepal360\FilamentCmsPro\Models\CmsSetting::get('test_key'));
+    }
+
+    public function test_class_aliases_resolved_correctly(): void
+    {
+        $this->assertTrue(class_exists('Filament\Forms\Components\Grid'));
+        $this->assertTrue(class_exists('Filament\Forms\Components\Section'));
+    }
+
+    public function test_dynamic_custom_fields_schema_generation(): void
+    {
+        \Nepal360\FilamentCmsPro\Models\CmsSetting::set('posts_custom_fields', [
+            [
+                'name' => 'test_field',
+                'label' => 'Test Field',
+                'type' => 'text',
+                'required' => true,
+                'is_translatable' => false,
+            ]
+        ]);
+
+        $schema = \Nepal360\FilamentCmsPro\Resources\Filament\Resources\PostResource::getCustomFieldsSchema('posts', false);
+        
+        $this->assertCount(1, $schema);
+        $this->assertInstanceOf(\Filament\Forms\Components\TextInput::class, $schema[0]);
+        $this->assertEquals('Test Field', $schema[0]->getLabel());
+        $this->assertTrue($schema[0]->isRequired());
+    }
 }
