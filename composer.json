@@ -1,0 +1,50 @@
+{
+    "name": "nepal360/filament-cms-pro",
+    "description": "An enterprise-grade WordPress-class CMS plugin for Laravel and Filament v5 with non-intrusive server-side analytics.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nepal360",
+            "email": "info@nepal360.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/http": "^10.0|^11.0",
+        "filament/filament": "^3.0",
+        "spatie/laravel-permission": "^6.0",
+        "ezyang/htmlpurifier": "^4.16"
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.0",
+        "orchestra/testbench": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nepal360\\FilamentCmsPro\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nepal360\\FilamentCmsPro\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nepal360\\FilamentCmsPro\\FilamentCmsProServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

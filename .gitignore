@@ -1,0 +1,5 @@
+/vendor/
+.phpunit.result.cache
+.env
+.php-cs-fixer.cache
+/tests/fixtures/
