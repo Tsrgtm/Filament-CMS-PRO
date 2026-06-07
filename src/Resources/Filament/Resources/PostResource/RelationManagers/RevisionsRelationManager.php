@@ -5,7 +5,7 @@ namespace Nepal360\FilamentCmsPro\Resources\Filament\Resources\PostResource\Rela
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Nepal360\FilamentCmsPro\Models\Revision;
 

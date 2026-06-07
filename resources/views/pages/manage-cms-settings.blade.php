@@ -2,7 +2,7 @@
     <form wire:submit="save" class="space-y-6">
         {{ $this->getSchema('form') }}
         
-        <x-filament-panels::form.actions
+        <x-filament::actions
             :actions="$this->getFormActions()"
         />
     </form>
