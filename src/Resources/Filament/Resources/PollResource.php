@@ -3,7 +3,7 @@
 namespace Nepal360\FilamentCmsPro\Resources\Filament\Resources;
 
 use Filament\Resources\Resource;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -20,9 +20,9 @@ class PollResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Interactive';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Section::make('Poll Details')
                     ->schema([

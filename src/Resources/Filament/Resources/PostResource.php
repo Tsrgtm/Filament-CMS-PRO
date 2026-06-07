@@ -3,7 +3,7 @@
 namespace Nepal360\FilamentCmsPro\Resources\Filament\Resources;
 
 use Filament\Resources\Resource;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -31,9 +31,9 @@ class PostResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'CMS';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Grid::make(3)
                     ->schema([
