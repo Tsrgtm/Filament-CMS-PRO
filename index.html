@@ -437,18 +437,32 @@
         <!-- Section: Install -->
         <section id="install">
             <h2>Installation & CLI Commands</h2>
-            <p>Install Filament CMS Pro inside your existing Laravel application root path using standard composer commands:</p>
+            <p>Because the package is hosted on GitHub rather than Packagist, tell Composer how to resolve the repository by editing your Laravel application's <code>composer.json</code> first:</p>
             
-            <h3>Step 1: Install Package Dependency</h3>
+            <h3>Step 1: Add VCS Repository in Laravel composer.json</h3>
             <div class="code-container">
                 <div class="code-header">
-                    <span>Shell</span>
+                    <span>composer.json</span>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
-                <pre><code>composer require nepal360/filament-cms-pro</code></pre>
+                <pre><code>"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/Tsrgtm/Filament-CMS-PRO.git"
+    }
+]</code></pre>
             </div>
 
-            <h3>Step 2: Publish Package Configs & Database Migrations</h3>
+            <h3>Step 2: Install Composer Dependency</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Terminal</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>composer require nepal360/filament-cms-pro:dev-main</code></pre>
+            </div>
+
+            <h3>Step 3: Publish Package Configs & Database Migrations</h3>
             <div class="code-container">
                 <div class="code-header">
                     <span>Shell</span>
