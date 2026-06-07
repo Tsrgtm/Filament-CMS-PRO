@@ -16,7 +16,7 @@ class PollResource extends Resource
 {
     protected static ?string $model = Poll::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Interactive';
 

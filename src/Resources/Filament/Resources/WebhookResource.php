@@ -17,7 +17,7 @@ class WebhookResource extends Resource
 {
     protected static ?string $model = Webhook::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-link';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-link';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
