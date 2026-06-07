@@ -16,4 +16,25 @@ Interactive developer guides, installation procedures, and block extension tutor
 
 ## Installation and Quickstart
 
-Please refer to the installation steps and Custom Block Extension guide detailed inside the live documentation page.
+Since the package is hosted on GitHub, you need to define it as a repository inside your Laravel application's `composer.json` file before running composer require:
+
+### Step 1: Add Repository to `composer.json`
+Open your Laravel application's `composer.json` and add the `repositories` block:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/Tsrgtm/Filament-CMS-PRO.git"
+    }
+]
+```
+
+### Step 2: Install Package
+Run the following composer require command:
+
+```bash
+composer require nepal360/filament-cms-pro:dev-main
+```
+
+Please refer to the installation steps and Custom Block Extension guide detailed inside the [live documentation page](https://tsrgtm.github.io/Filament-CMS-PRO/).
