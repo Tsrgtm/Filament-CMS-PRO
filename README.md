@@ -10,6 +10,10 @@ An enterprise-grade, WordPress-class Content Management System (CMS) plugin pack
 4. **Automated Sitemaps & Schema**: Auto-generates standard sitemaps, Google News sitemaps (last 48h posts), and injects JSON-LD article schemas.
 5. **Polymorphic Translation Mapping**: Fully localized articles, categories, and tags database schemas.
 
+## Documentation
+
+Interactive developer guides, installation procedures, and block extension tutorials are hosted live at: [https://tsrgtm.github.io/Filament-CMS-PRO/](https://tsrgtm.github.io/Filament-CMS-PRO/)
+
 ## Installation and Quickstart
 
-Please refer to the installation steps and Custom Block Extension guide detailed inside the full developer documentation page.
+Please refer to the installation steps and Custom Block Extension guide detailed inside the live documentation page.
