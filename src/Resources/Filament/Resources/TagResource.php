@@ -18,7 +18,7 @@ class TagResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Taxonomy';
+    protected static string|\UnitEnum|null $navigationGroup = 'Taxonomy';
 
     public static function form(Form $form): Form
     {

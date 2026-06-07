@@ -18,7 +18,7 @@ class PollResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?string $navigationGroup = 'Interactive';
+    protected static string|\UnitEnum|null $navigationGroup = 'Interactive';
 
     public static function form(Form $form): Form
     {
