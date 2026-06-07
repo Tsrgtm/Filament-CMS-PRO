@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filament CMS Pro - Enterprise Documentation</title>
+    
+    <!-- Google Fonts Inter & Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Premium CSS Design System */
+        :root {
+            --hue: 224;
+            --bg-primary: hsl(var(--hue), 25%, 97%);
+            --bg-secondary: hsl(var(--hue), 20%, 93%);
+            --bg-surface: hsl(var(--hue), 0%, 100%);
+            --text-primary: hsl(var(--hue), 30%, 12%);
+            --text-secondary: hsl(var(--hue), 15%, 42%);
+            --accent: hsl(250, 85%, 58%);
+            --accent-hover: hsl(250, 85%, 52%);
+            --accent-soft: rgba(99, 102, 241, 0.08);
+            --border: hsl(var(--hue), 15%, 87%);
+            --code-bg: hsl(var(--hue), 20%, 10%);
+            --code-text: hsl(var(--hue), 30%, 92%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: hsl(var(--hue), 28%, 7%);
+            --bg-secondary: hsl(var(--hue), 25%, 11%);
+            --bg-surface: hsl(var(--hue), 25%, 14%);
+            --text-primary: hsl(var(--hue), 15%, 93%);
+            --text-secondary: hsl(var(--hue), 10%, 63%);
+            --accent: hsl(250, 90%, 65%);
+            --accent-hover: hsl(250, 90%, 70%);
+            --accent-soft: rgba(129, 140, 248, 0.12);
+            --border: hsl(var(--hue), 20%, 20%);
+            --code-bg: hsl(var(--hue), 25%, 8%);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.625;
+            transition: var(--transition);
+        }
+
+        /* Sidebar layout styling */
+        aside {
+            width: 320px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 2.25rem 1.75rem;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-secondary);
+        }
+
+        nav {
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            padding-right: 0.25rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.6rem 0.85rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+        }
+
+        nav a svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-primary);
+            background-color: var(--accent-soft);
+            font-weight: 600;
+        }
+
+        nav a.active {
+            border-left: 3px solid var(--accent);
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        /* Main reading space */
+        main {
+            margin-left: 320px;
+            padding: 3.5rem 5rem;
+            flex-grow: 1;
+            max-width: 1100px;
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .theme-toggle-btn {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 0.55rem 1.15rem;
+            border-radius: 30px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .theme-toggle-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Spell checker banner */
+        #suggestion-banner {
+            display: none;
+            background-color: var(--accent-soft);
+            border: 1px dashed var(--accent);
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        #suggestion-banner a {
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        section {
+            display: block;
+            margin-bottom: 4.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.04em; }
+        h2 { font-size: 1.7rem; font-weight: 700; margin-top: 2.25rem; margin-bottom: 1rem; letter-spacing: -0.02em; color: var(--accent); }
+        h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        p { margin-bottom: 1.25rem; color: var(--text-secondary); }
+        ul, ol { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        li { margin-bottom: 0.5rem; }
+
+        /* Tables style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: var(--bg-surface);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 1.1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Code Block Wrapper */
+        .code-container {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 10px;
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1.25rem;
+            background-color: rgba(0, 0, 0, 0.25);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        pre {
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--code-text);
+        }
+
+        .copy-btn {
+            background-color: var(--accent);
+            border: none;
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Premium Alerts */
+        .alert {
+            padding: 1.25rem 1.75rem;
+            border-radius: 10px;
+            margin-bottom: 1.75rem;
+            border-left: 4px solid var(--accent);
+            background-color: var(--accent-soft);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .alert strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--accent);
+        }
+
+        /* Responsive UI grids */
+        @media (max-width: 950px) {
+            body { flex-direction: column; }
+            aside { width: 100%; position: relative; border-right: none; border-bottom: 1px solid var(--border); height: auto; }
+            main { margin-left: 0; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Left Sidebar -->
+    <aside>
+        <div class="logo-wrapper">
+            <img src="logo.png" alt="Filament CMS Pro Logo" class="logo-img">
+            <div class="logo-text">Filament<span>CMSPro</span></div>
+        </div>
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" class="search-input" id="section-search" placeholder="Search documentation...">
+        </div>
+        <nav id="docs-nav">
+            <a href="#intro" class="active"><i data-lucide="book-open"></i>Introduction</a>
+            <a href="#install"><i data-lucide="download"></i>Installation</a>
+            <a href="#config"><i data-lucide="settings"></i>Configuration</a>
+            <a href="#plugin-reg"><i data-lucide="plug"></i>Plugin Registration</a>
+            <a href="#blocks"><i data-lucide="edit-3"></i>Gutenberg visual Editor</a>
+            <a href="#workflow"><i data-lucide="git-pull-request"></i>Editorial Workflow</a>
+            <a href="#analytics"><i data-lucide="activity"></i>Non-Intrusive Analytics</a>
+            <a href="#revisions"><i data-lucide="history"></i>Revisions & Rollbacks</a>
+            <a href="#locks"><i data-lucide="lock"></i>Concurrent Locking</a>
+            <a href="#webhooks"><i data-lucide="webhook"></i>Webhooks Delivery</a>
+            <a href="#taxonomies"><i data-lucide="folder"></i>Categories & Tags</a>
+            <a href="#templates"><i data-lucide="layout"></i>Layout Templates</a>
+            <a href="#api"><i data-lucide="terminal"></i>Headless REST API</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Reader -->
+    <main>
+        <header>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                <i data-lucide="moon" id="theme-icon"></i>
+                <span id="theme-text">Dark Mode</span>
+            </button>
+        </header>
+
+        <!-- Spelling error banner -->
+        <div id="suggestion-banner">
+            <i data-lucide="help-circle"></i>
+            <span>Did you mean: <a id="suggestion-link"></a>?</span>
+        </div>
+
+        <!-- Section: Intro -->
+        <section id="intro">
+            <h1>Introduction</h1>
+            <p>Welcome to the <strong>Filament CMS Pro</strong> enterprise-grade developer documentation. Filament CMS Pro is a complete, stable, high-performance visual content management plugin package built for Laravel 10/11 and Filament v5. It is designed to provide full-fledged, multi-lingual publication lifecycles, visual drag-and-drop workspace layout building, and advanced server-side telemetries.</p>
+            <div class="alert">
+                <strong>Enterprise Framework Architecture:</strong> Fully translatable taxonomy elements, revisions rollbacks, content editing locks, automated news map builders, and an HMAC-signed background webhook notification engine.
+            </div>
+            <h2>Technical Features Mapping</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Backend Engine Class</th>
+                        <th>Configuration Parameter</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Editorial Workflow</strong></td>
+                        <td><code>Nepal360\FilamentCmsPro\Workflow\WorkflowService</code></td>
+                        <td><code>workflow.enabled</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Visitor Analytics</strong></td>
+                        <td><code>Nepal360\FilamentCmsPro\Http\Middleware\TrackVisitorAnalytics</code></td>
+                        <td><code>analytics.enabled</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Post Revisions Rollback</strong></td>
+                        <td>Eloquent saved model events + custom relation managers</td>
+                        <td>Automatic database triggers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Concurrent Editing Lock</strong></td>
+                        <td>EditPost page mount checks + <code>ContentLock</code> Eloquent hooks</td>
+                        <td>15 minutes automatic expiry</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Webhooks Engine</strong></td>
+                        <td><code>Nepal360\FilamentCmsPro\Jobs\DeliverWebhookJob</code></td>
+                        <td>Queued job execution</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section: Install -->
+        <section id="install">
+            <h2>Installation & CLI Commands</h2>
+            <p>Install Filament CMS Pro inside your existing Laravel application root path using standard composer commands:</p>
+            
+            <h3>Step 1: Install Package Dependency</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Shell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>composer require nepal360/filament-cms-pro</code></pre>
+            </div>
+
+            <h3>Step 2: Publish Package Configs & Database Migrations</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Shell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>php artisan vendor:publish --tag="filament-cms-pro-config"
+php artisan vendor:publish --tag="filament-cms-pro-migrations"
+php artisan vendor:publish --tag="filament-cms-pro-views"</code></pre>
+            </div>
+
+            <h3>Step 3: Run Database Migrations</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Shell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>php artisan migrate</code></pre>
+            </div>
+        </section>
+
+        <!-- Section: Config -->
+        <section id="config">
+            <h2>Configuration Guide</h2>
+            <p>Publishing the config publishes <code>config/filament-cms-pro.php</code>. Define the settings mapping:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>filament-cms-pro.php</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>return [
+    'workflow' => [
+        'enabled' => true,
+        'slack_webhook_url' => env('CMS_SLACK_WEBHOOK_URL'),
+    ],
+    'analytics' => [
+        'enabled' => true,
+        'gravity' => 1.8,
+        'exclude_paths' => [
+            'admin*',
+            'api/v1/analytics*',
+        ],
+    ],
+    'comments' => [
+        'auto_approve' => false,
+        'spam_check' => true,
+    ],
+    'cache' => [
+        'ttl' => 86400,
+    ],
+];</code></pre>
+            </div>
+        </section>
+
+        <!-- Section: Plugin Registration -->
+        <section id="plugin-reg">
+            <h2>Filament Plugin Registration</h2>
+            <p>Register the plugin inside your panel provider class (usually <code>app/Providers/Filament/AdminPanelProvider.php</code>) to automatically register all visual resources, widgets, and pages in the Filament workspace:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>AdminPanelProvider.php</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>use Nepal360\FilamentCmsPro\FilamentCmsProPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->default()
+        ->id('admin')
+        ->plugins([
+            FilamentCmsProPlugin::make(),
+        ]);
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Section: Blocks -->
+        <section id="blocks">
+            <h2>Gutenberg Visual Block Editor</h2>
+            <p>The visual content workspace utilizes visual visual block builders inside the <code>PostResource</code> translation forms. The visual blocks correspond to Blade view templates: </p>
+            
+            <ul>
+                <li><strong>Paragraph:</strong> Textarea input rendered inside `components/blocks/paragraph.blade.php`.</li>
+                <li><strong>Heading:</strong> Text inputs with a level option rendered inside `components/blocks/heading.blade.php`.</li>
+                <li><strong>Image:</strong> Visual upload file input with captions rendered inside `components/blocks/image.blade.php`.</li>
+                <li><strong>CTA Button:</strong> URL target link with primary/secondary styles inside `components/blocks/cta.blade.php`.</li>
+                <li><strong>FAQ Accordion:</strong> Accordion lists of questions and answers inside `components/blocks/faq.blade.php`.</li>
+                <li><strong>TikTok Embed:</strong> Social media video cards mapping the embed code inside `components/blocks/tiktok.blade.php`.</li>
+            </ul>
+
+            <div class="alert">
+                <strong>Template Overrides:</strong> Copy files from `vendor/filament-cms-pro/components/blocks` to your application path `resources/views/vendor/filament-cms-pro/components/blocks` to customize HTML styling.
+            </div>
+        </section>
+
+        <!-- Section: Workflow -->
+        <section id="workflow">
+            <h2>Editorial Workflow Gating</h2>
+            <p>Post status transitions are managed by the service provider's state machine. The allowed transitions map sequence is:</p>
+            <div class="alert font-mono">
+                draft -> review -> fact_check -> editor_approved -> publisher_approved -> published
+            </div>
+            <p>If a transition is attempted outside this matrix (or if fact-checking is bypassed without approval), a validation exception is thrown. Scheduled posts are processed every minute using the scheduling command:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Crontab</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1</code></pre>
+            </div>
+        </section>
+
+        <!-- Section: Analytics -->
+        <section id="analytics">
+            <h2>Non-Intrusive Server-Side Analytics</h2>
+            <p>Visitor analytics are tracked directly on the server side via the `TrackVisitorAnalytics` middleware, avoiding Google Search Console core web vitals speed score degradation:</p>
+            <ul>
+                <li><strong>GDPR Cookieless tracking:</strong> Unique users are recognized by matching their daily fingerprint hash: <code>hash('sha256', config('app.key') . $ip . $userAgent)</code>.</li>
+                <li><strong>Zero Latency:</strong> DB recording is executed using queued background jobs (via the `LogAnalyticsEvent` job).</li>
+                <li><strong>Trending Calculations:</strong> Calculated with gravity decay over hours:
+                    $$\text{Trending Score} = \frac{\text{views}_{24\text{h}} + 0.5 \times \text{views}_{7\text{d}}}{(\text{Age in Hours} + 2)^{1.8}}$$
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section: Revisions -->
+        <section id="revisions">
+            <h2>Post Translation Revisions</h2>
+            <p>Every time a post translation record is modified, the database model automatically triggers revision logs inside the `revisions` table, tracking: locale, title, content blocks array, and the editing User ID.</p>
+            <p>In the post editing form, the <strong>Revision History</strong> relation manager list displays all past edits. Clicking <strong>Restore</strong> replaces the active translation attributes with the select log, updating the draft visual canvas instantly.</p>
+        </section>
+
+        <!-- Section: Locks -->
+        <section id="locks">
+            <h2>Concurrent Editing Protection (Content Locks)</h2>
+            <p>When an editor opens the edit page for a post, a content lock is recorded for that post and editor. The lock stays active for 15 minutes.</p>
+            <p>If another editor attempts to open the edit page for the same post, the page redirects to the post list immediately, displaying a danger notification indicating which administrator is editing the post.</p>
+        </section>
+
+        <!-- Section: Webhooks -->
+        <section id="webhooks">
+            <h2>Webhooks Delivery System</h2>
+            <p>Registered webhook targets receive JSON payloads triggered by post publishing, updates, deletions, and workflow state changes. Payload delivery is handled via queued background tasks with standard exponential backoff retries.</p>
+            
+            <h3>Webhook Signature Verification (HMAC SHA-256)</h3>
+            <p>If a secret key is specified, requests include an <code>X-CMS-Signature</code> header. Verify payload signatures in your receiver applications:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>PHP Receiver</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>$secret = 'your_configured_webhook_secret';
+$payload = file_get_contents('php://input');
+$receivedSignature = $_SERVER['HTTP_X_CMS_SIGNATURE'] ?? '';
+
+$computedSignature = hash_hmac('sha256', $payload, $secret);
+
+if (hash_equals($computedSignature, $receivedSignature)) {
+    // Signature is valid. Process webhook payload safely.
+} else {
+    // Signature verification failed! Reject request.
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Section: Taxonomies -->
+        <section id="taxonomies">
+            <h2>Multi-lingual Taxonomy (Categories & Tags)</h2>
+            <p>Tags and Categories tables support fully translatable translations, avoiding database clutter. Administrators manage hierarchy categories using the category panel resource, defining parent relationships and display sort order values.</p>
+        </section>
+
+        <!-- Section: Templates -->
+        <section id="templates">
+            <h2>Article Layout Templates</h2>
+            <p>Define custom templates inside the `templates/` views. The package searches for overrides in your application path `resources/views/vendor/filament-cms-pro/templates/[layout_template].blade.php` before loading default templates.</p>
+        </section>
+
+        <!-- Section: API -->
+        <section id="api">
+            <h2>Headless REST API</h2>
+            
+            <h3>Get Posts List</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>HTTP</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>GET /api/v1/posts?category=travel&tag=nepal&sort=trending HTTP/1.1
+Host: your-cms-domain.com
+X-Locale: en
+Accept: application/json</code></pre>
+            </div>
+
+            <h3>Response JSON Payload</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <span>JSON</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "current_page": 1,
+  "data": [
+    {
+      "id": 12,
+      "featured_image": "posts/travel-guide.jpg",
+      "layout_template": "standard",
+      "trending_score": 12.45,
+      "status": "published",
+      "published_at": "2026-06-07T10:00:00Z",
+      "translations": [
+        {
+          "locale": "en",
+          "title": "Stunning Trekking Routes in Nepal",
+          "slug": "stunning-trekking-routes-in-nepal",
+          "content": [
+            {
+              "type": "paragraph",
+              "data": {
+                "text": "Detailed visual trekking outlines."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</code></pre>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Set light/dark theme toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            const btnIcon = document.getElementById('theme-icon');
+            const btnText = document.getElementById('theme-text');
+            
+            if (newTheme === 'light') {
+                btnIcon.setAttribute('data-lucide', 'sun');
+                btnText.textContent = 'Light Mode';
+            } else {
+                btnIcon.setAttribute('data-lucide', 'moon');
+                btnText.textContent = 'Dark Mode';
+            }
+            lucide.createIcons();
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Apply theme from localStorage on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const btnIcon = document.getElementById('theme-icon');
+            const btnText = document.getElementById('theme-text');
+            if (savedTheme === 'light') {
+                btnIcon.setAttribute('data-lucide', 'sun');
+                btnText.textContent = 'Light Mode';
+            } else {
+                btnIcon.setAttribute('data-lucide', 'moon');
+                btnText.textContent = 'Dark Mode';
+            }
+            lucide.createIcons();
+        });
+
+        // Search tags indexes
+        const searchableKeywords = [
+            { term: 'introduction', id: '#intro' },
+            { term: 'setup', id: '#install' },
+            { term: 'installation', id: '#install' },
+            { term: 'configuration', id: '#config' },
+            { term: 'settings', id: '#config' },
+            { term: 'plugin', id: '#plugin-reg' },
+            { term: 'registration', id: '#plugin-reg' },
+            { term: 'gutenberg', id: '#blocks' },
+            { term: 'blocks', id: '#blocks' },
+            { term: 'workflow', id: '#workflow' },
+            { term: 'editorial', id: '#workflow' },
+            { term: 'analytics', id: '#analytics' },
+            { term: 'revisions', id: '#revisions' },
+            { term: 'rollbacks', id: '#revisions' },
+            { term: 'locks', id: '#locks' },
+            { term: 'locking', id: '#locks' },
+            { term: 'webhooks', id: '#webhooks' },
+            { term: 'categories', id: '#taxonomies' },
+            { term: 'tags', id: '#taxonomies' },
+            { term: 'taxonomies', id: '#taxonomies' },
+            { term: 'templates', id: '#templates' },
+            { term: 'api', id: '#api' },
+            { term: 'tiktok', id: '#blocks' }
+        ];
+
+        // Levenshtein distance function for spell checking
+        function getLevenshteinDistance(a, b) {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1, // substitution
+                            matrix[i][j - 1] + 1,     // insertion
+                            matrix[i - 1][j] + 1      // deletion
+                        );
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        // Live Navigation Highlight Observer
+        const navLinks = document.querySelectorAll('#docs-nav a');
+        const sections = document.querySelectorAll('section');
+
+        window.addEventListener('scroll', () => {
+            let currentSectionId = 'intro';
+            sections.forEach(sec => {
+                const top = sec.offsetTop - 150;
+                if (window.scrollY >= top) {
+                    currentSectionId = sec.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSectionId) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Search trigger and suggestions checker
+        const searchInput = document.getElementById('section-search');
+        const suggestionBanner = document.getElementById('suggestion-banner');
+        const suggestionLink = document.getElementById('suggestion-link');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            suggestionBanner.style.display = 'none';
+
+            if (!query) {
+                // Restore all sections visibility
+                sections.forEach(s => s.style.display = 'block');
+                navLinks.forEach(l => l.style.display = 'flex');
+                return;
+            }
+
+            let matchesCount = 0;
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                const id = section.getAttribute('id');
+                const navLink = document.querySelector(`#docs-nav a[href="#${id}"]`);
+
+                if (text.includes(query)) {
+                    section.style.display = 'block';
+                    if (navLink) navLink.style.display = 'flex';
+                    matchesCount++;
+                } else {
+                    section.style.display = 'none';
+                    if (navLink) navLink.style.display = 'none';
+                }
+            });
+
+            // If no match found, trigger Google-like spelling suggestions
+            if (matchesCount === 0) {
+                let bestMatch = null;
+                let minDistance = 999;
+
+                searchableKeywords.forEach(k => {
+                    const distance = getLevenshteinDistance(query, k.term);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        bestMatch = k;
+                    }
+                });
+
+                // Display suggestion banner if similarity is close (threshold distance <= 3)
+                if (bestMatch && minDistance <= 3 && minDistance > 0) {
+                    suggestionBanner.style.display = 'flex';
+                    suggestionLink.textContent = bestMatch.term;
+                    suggestionLink.onclick = () => {
+                        searchInput.value = bestMatch.term;
+                        // Fire search on suggestion
+                        searchInput.dispatchEvent(new Event('input'));
+                        window.location.hash = bestMatch.id;
+                        document.querySelector(bestMatch.id).scrollIntoView({ behavior: 'smooth' });
+                    };
+                }
+            }
+        });
+
+        // Copy Code function
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement.nextElementSibling.querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                btn.textContent = 'Copied!';
+                btn.style.backgroundColor = 'hsl(140, 75%, 42%)';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.style.backgroundColor = 'var(--accent)';
+                }, 1800);
+            });
+        }
+    </script>
+</body>
+</html>
